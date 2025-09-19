@@ -17,11 +17,14 @@ function AddPost() {
 
   const [userActive, setUserActive] = useState("");
 
-  useEffect(function () {
-    getUserByEmail(user?.primaryEmailAddress.emailAddress)
-      .then()
-      .then((data) => setUserActive(data));
-  }, []);
+  useEffect(
+    function () {
+      getUserByEmail(user?.primaryEmailAddress.emailAddress)
+        .then()
+        .then((data) => setUserActive(data));
+    },
+    [user?.primaryEmailAddress.emailAddress]
+  );
 
   function handleClearFields() {
     textAreaRef.current.value = "";

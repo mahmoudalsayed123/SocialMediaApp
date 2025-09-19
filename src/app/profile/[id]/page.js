@@ -70,7 +70,7 @@ function Profile({ params }) {
         (res) => setUserSessionInfo(res)
       );
     },
-    [user?.primaryEmailAddress.emailAddress]
+    [user?.primaryEmailAddress.emailAddress,id]
   );
 
   useEffect(

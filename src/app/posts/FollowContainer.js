@@ -15,16 +15,19 @@ function FollowContainer({ creator }) {
   const [isFollow, setIsFollow] = useState(false);
   const { user } = useUser();
 
-  useEffect(function () {
-    getAllUserInfoByEmail(user?.primaryEmailAddress.emailAddress).then((res) =>
-      setUserId(res.id)
-    );
+  useEffect(
+    function () {
+      getAllUserInfoByEmail(user?.primaryEmailAddress.emailAddress).then(
+        (res) => setUserId(res.id)
+      );
 
-    getFollows(userId).then((res) => {
-      const x = res.find((e) => creator.id === e.followedId);
-      setIsFollow(x.followedId === creator.id);
-    });
-  });
+      getFollows(userId).then((res) => {
+        const x = res.find((e) => creator.id === e.followedId);
+        setIsFollow(x.followedId === creator.id);
+      });
+    },
+    [user?.primaryEmailAddress.emailAddress, userId, creator]
+  );
 
   function handlefollowed() {
     if (userId) {

@@ -9,9 +9,9 @@ function PostSaveContainer({ post }) {
 
   useEffect(
     function () {
-      getUserByid(post.userPostId).then((res) => setPostUserInfo(res));
+      getUserByid(post?.userPostId).then((res) => setPostUserInfo(res));
     },
-    [post.userPostId]
+    [post?.userPostId]
   );
 
   return (

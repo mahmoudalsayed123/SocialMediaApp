@@ -5,46 +5,6 @@ import img1 from '../../../public/images/1.jpg'
 import { useUser } from '@clerk/nextjs';
 import { getPost } from '../_utils/postApi';
 
-// Fetch Posts in here
-
-// const posts = [
-//     {
-//         id: 13545, text: 'bla bla bla', content: img1, comments: [
-//             { id: 1, text: 'comments comments comments comments comments ', content: '', user: {} }
-//         ]
-//     },
-//     {
-//         id: 13365, text: 'bla bla bla', content: img1, comments: [
-//             { id: 1, text: 'comments comments comments comments comments ', content: '', user: {} }
-//         ]
-//     },
-//     {
-//         id: 15665, text: 'bla bla bla', content: img1, comments: [
-//             { id: 1, text: 'comments comments comments comments comments ', content: '', user: {} }
-//         ]
-//     },
-//     {
-//         id: 4665, text: 'bla bla bla', content: img1, comments: [
-//             { id: 1, text: 'comments comments comments comments comments ', content: '', user: {} }
-//         ]
-//     },
-//     {
-//         id: 56, text: 'bla bla bla', content: img1, comments: [
-//             { id: 1, text: 'comments comments comments comments comments ', content: '', user: {} }
-//         ]
-//     },
-//     {
-//         id: 34, text: 'bla bla bla', content: img1, comments: [
-//             { id: 1, text: 'comments comments comments comments comments ', content: '', user: {} }
-//         ]
-//     },
-//     // {
-//     //     id: 2, text: 'bla bla bla', content: v1, comments: [
-//     //         { id: 1, text: 'comments comments comments comments comments ', content: '', user: {} }
-//     //     ]
-//     // },
-// ]
-
 
 function Posts() {
 

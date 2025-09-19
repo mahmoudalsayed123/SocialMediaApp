@@ -41,7 +41,7 @@ function EditProfile() {
 
     updateUserIfo(userInfo?.id, newUserInfo).then((res) => console.log(res));
     handleClearFields();
-    // redirect("/posts");
+    redirect("/posts");
   }
 
   return (

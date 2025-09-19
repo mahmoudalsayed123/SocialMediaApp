@@ -14,7 +14,6 @@ function PostPage({ params }) {
 
   const [post, setPost] = useState({});
   const [userInfo, setUserInfo] = useState({});
-  console.log(userInfo);
 
   useEffect(
     function () {
