@@ -1,6 +1,12 @@
 import { IoBookmarkOutline } from "react-icons/io5";
 import PostSaveContainer from "./PostSaveContainer";
-import { getAllSaves, getUserByEmail } from "../_utils/postApi";
+import {
+  deleteConversation,
+  getAllMessage,
+  getAllSaves,
+  getConversation,
+  getUserByEmail,
+} from "../_utils/postApi";
 import { currentUser } from "@clerk/nextjs/server";
 
 async function PostsSavePage() {
@@ -8,6 +14,18 @@ async function PostsSavePage() {
   const userId = await getUserByEmail(user?.primaryEmailAddress?.emailAddress);
   const postsSaved = await getAllSaves(userId?.[0]?.id);
 
+  const userSession = await getAllUserInfoByEmail(
+    user?.primaryEmailAddress?.emailAddress
+  );
+
+  const conversation = await getConversation(creator.id, userSession.id);
+
+  if (conversation.length > 0) {
+    let messages = await getAllMessage(conversation[0]?.id);
+    if (messages.length === 0) {
+      deleteConversation(conversation[0]?.id);
+    }
+  }
   return (
     <div className="px-[20px] lg:ms-[-200px] lg:col-span-2 relative">
       <div className="flex items-center my-[50px]">
