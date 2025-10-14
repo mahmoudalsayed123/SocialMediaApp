@@ -48,7 +48,6 @@ const BtnAddChat = ({ otherInfo, userSessionInfo }) => {
 
       if (conversation.length > 0) {
         redirect(`/chat/${conversation[0].id}`);
-        return;
       }
 
       createConversation(userSessionInfo.id, otherInfo.id);
