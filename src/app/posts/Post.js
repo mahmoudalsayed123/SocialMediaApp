@@ -1,22 +1,13 @@
-"use client";
 import Image from "next/image";
-import React, { Suspense, useEffect, useState } from "react";
+
 import { getUserByid } from "../_utils/postApi";
 import Like from "../_components/Like";
 import SavedPost from "../_components/SavedPost";
 import Link from "next/link";
 import SkeletonPost from "./SkeletonPost";
 
-function Post({ post }) {
-  const [userPost, setUserPost] = useState({});
-
-  useEffect(() => {
-    if (post?.userPostId) {
-      getUserByid(post.userPostId).then((data) => {
-        setUserPost(data);
-      });
-    }
-  }, [post?.userPostId]);
+async function Post({ post }) {
+  const userPost = await getUserByid(post?.userPostId);
 
   return (
     <div className=" px-[30px] py-[15px] rounded-lg">

@@ -67,7 +67,7 @@ function EditProfile() {
           <label className="cursor-pointer ">
             <Input
               className="hidden"
-              defaultValue={userInfo?.avatar}
+              defaultValue={userInfo?.avatar || ''}
               type="file"
               name="content"
               ref={inputRef}
@@ -82,7 +82,7 @@ function EditProfile() {
           <h2 className="text-lg font-bold mb-[20px]">Name</h2>
           <input
             onChange={(e) => setName(e.target.value)}
-            defaultValue={userInfo?.userName}
+            defaultValue={userInfo?.userName || ''}
             name="name"
             type="text"
             ref={nameInput}
@@ -94,7 +94,7 @@ function EditProfile() {
           <h2 className=" text-lg font-bold mb-[20px]">User Name</h2>
           <input
             disabled
-            value={userInfo?.userName}
+            defaultValue={userInfo?.userName || ''}
             type="text"
             className="border-1 border-slate-700 px-[25px] py-[15px] w-full outline-0 rounded-lg text-gray-500 text-lg"
           />
@@ -104,7 +104,7 @@ function EditProfile() {
           <h2 className="text-lg font-bold mb-[20px]">Email</h2>
           <input
             disabled
-            value={userInfo?.email}
+            defaultValue={userInfo?.email  || ''}
             type="text"
             className="border-1 border-slate-700 px-[25px] py-[15px] w-full outline-0 rounded-lg text-gray-500 text-lg"
           />

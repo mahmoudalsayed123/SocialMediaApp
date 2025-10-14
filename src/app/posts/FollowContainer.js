@@ -1,41 +1,29 @@
-"use client";
-import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import {
-  createFollow,
-  getAllUserInfoByEmail,
-  getFollows,
-} from "../_utils/postApi";
+
 import Link from "next/link";
 import SkeletonFollow from "./SkeletonFollow";
+import IsFollow from "../_components/IsFollow";
+import {
+  deleteConversation,
+  getAllMessage,
+  getAllUserInfoByEmail,
+  getConversation,
+} from "../_utils/postApi";
+import { currentUser } from "@clerk/nextjs/server";
 
-function FollowContainer({ creator }) {
-  const [userId, setUserId] = useState(null);
-  const [isFollow, setIsFollow] = useState(false);
-  const { user } = useUser();
+async function FollowContainer({ creator }) {
+  const user = await currentUser();
 
-  useEffect(
-    function () {
-      getAllUserInfoByEmail(user?.primaryEmailAddress.emailAddress).then(
-        (res) => setUserId(res.id)
-      );
-
-      getFollows(userId).then((res) => {
-        const x = res.find((e) => creator.id === e.followedId);
-        setIsFollow(x.followedId === creator.id);
-      });
-    },
-    [user?.primaryEmailAddress.emailAddress, userId, creator]
+  const userSession = await getAllUserInfoByEmail(
+    user?.primaryEmailAddress?.emailAddress
   );
 
-  function handlefollowed() {
-    if (userId) {
-      const newFollow = {
-        followerId: userId,
-        followedId: creator?.id,
-      };
-      createFollow(newFollow, userId);
+  const conversation = await getConversation(creator.id, userSession.id);
+
+  if (conversation.length > 0) {
+    let messages = await getAllMessage(conversation[0]?.id);
+    if (messages.length === 0) {
+      deleteConversation(conversation[0]?.id);
     }
   }
 
@@ -61,12 +49,7 @@ function FollowContainer({ creator }) {
             <h3 className="text-xl font-bold mb-[15px]">{creator.userName}</h3>
           </div>
 
-          <button
-            onClick={handlefollowed}
-            className="bg-violet-400 rounded-lg  px-[20px] py-[6px] text-lg font-semibold cursor-pointer transition-all duration-300 hover:bg-violet-500"
-          >
-            {isFollow ? "UNFOLLOW" : "FOLLOW"}
-          </button>
+          <IsFollow creator={creator} />
         </>
       ) : (
         <SkeletonFollow />

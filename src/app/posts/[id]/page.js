@@ -1,33 +1,13 @@
-"use client";
-
 import Like from "@/app/_components/Like";
 import SavedPost from "@/app/_components/SavedPost";
 import { getPostById, getUserByid } from "@/app/_utils/postApi";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
 
-import { IoArrowBack } from "react-icons/io5";
-
-function PostPage({ params }) {
-  const { id } = params;
-
-  const [post, setPost] = useState({});
-  const [userInfo, setUserInfo] = useState({});
-
-  useEffect(
-    function () {
-      getPostById(id).then((res) => setPost(res));
-    },
-    [id]
-  );
-
-  useEffect(
-    function () {
-      getUserByid(post?.userPostId).then((res) => setUserInfo(res));
-    },
-    [post?.userPostId]
-  );
+async function PostPage({ params }) {
+  const { id } = await params;
+  const post = await getPostById(id);
+  const userInfo = await getUserByid(post?.userPostId);
 
   return (
     <div className="flex-col-reverse justify-center items-center lg:ms-[-200px] lg:grid lg:grid-cols-2 lg:col-span-2 lg:py-[100px] ">
@@ -75,8 +55,8 @@ function PostPage({ params }) {
         </div>
 
         <div className="flex justify-between items-center px-[20px] lg:absolute lg:bottom-[20px] lg:left-0 w-full">
-          <Like postUserId={id} />
-          <SavedPost postUserId={id} />
+          <Like postUserId={post?.id} />
+          <SavedPost postUserId={post?.id} />
         </div>
       </div>
     </div>

@@ -1,18 +1,30 @@
-"use client";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { getUserByid } from "../_utils/postApi";
+
+import {
+  deleteConversation,
+  getAllMessage,
+  getAllUserInfoByEmail,
+  getAllUserWithoutMe,
+  getConversation,
+  getUserByid,
+} from "../_utils/postApi";
 import Link from "next/link";
+import { currentUser } from "@clerk/nextjs/server";
 
-function PostSaveContainer({ post }) {
-  const [postUserInfo, setPostUserInfo] = useState({});
-
-  useEffect(
-    function () {
-      getUserByid(post?.userPostId).then((res) => setPostUserInfo(res));
-    },
-    [post?.userPostId]
+async function PostSaveContainer({ post }) {
+  const user = await currentUser();
+  const postUserInfo = await getUserByid(post?.userPostId);
+  const otherId = await getAllUserWithoutMe(postUserInfo?.id);
+  const userSession = await getAllUserInfoByEmail(
+    user?.primaryEmailAddress?.emailAddress
   );
+
+  const conversation = await getConversation(otherId.id, userSession.id);
+  const allMessages = await getAllMessage(conversation[0]?.id);
+
+  if (conversation.length > 0 && allMessages.length === 0) {
+    deleteConversation(conversation[0]?.id);
+  }
 
   return (
     <>

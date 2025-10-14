@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 import { addPost, getUserByEmail } from "../_utils/postApi";
 import { useUser } from "@clerk/nextjs";
 import { LuImagePlus } from "react-icons/lu";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 function AddPost() {

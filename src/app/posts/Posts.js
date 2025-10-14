@@ -1,29 +1,24 @@
-'use client';
-import React, { useEffect, useState } from 'react'
-import Post from './Post'
-import img1 from '../../../public/images/1.jpg'
-import { useUser } from '@clerk/nextjs';
-import { getPost } from '../_utils/postApi';
+import Post from "./Post";
 
+import { getPost } from "../_utils/postApi";
 
-function Posts() {
+import InputSearch from "../_components/InputSearch";
 
-    const [posts,setPosts] = useState([]);
+async function Posts({ filter }) {
+  const name = filter?.topic || "";
+  const posts = await getPost(name);
 
-    useEffect(function () {
-        getPost().then((res) => {
-            setPosts(res)
-        })
-    }, [])
-
-
-    return (
-        <div className='grid grid-cols-1 gap-5'>
-            {posts.map((post) =>
-                <Post key={post.id} post={post} />
-            )}
-        </div>
-    )
+  return (
+    <div className="grid grid-cols-1 gap-5">
+      <InputSearch />
+      <h1 className="text-whtie text-4xl lg:text-5xl font-bold w-fit px-[20px] lg:px-0 mb-[20px]">
+        Home Feed
+      </h1>
+      {posts.map((post) => (
+        <Post key={post.id} post={post} />
+      ))}
+    </div>
+  );
 }
 
-export default Posts
+export default Posts;

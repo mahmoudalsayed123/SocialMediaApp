@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { redirect } from "next/navigation";
 
 const supabaseUrl = "https://slwbaobgpnqfloovztsy.supabase.co";
 
@@ -47,13 +48,12 @@ export async function createUser(newUser) {
 export async function getUserByEmail(email) {
   let { data, error } = await supabase
     .from("user")
-    .select("id")
-    .eq("email", email)
-    .single();
+    .select("*")
+    .eq("email", email);
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
@@ -63,15 +63,14 @@ export async function getAllUserInfoByEmail(email) {
   let { data, error } = await supabase
     .from("user")
     .select("*")
-    .eq("email", email)
-    .single();
+    .eq("email", email);
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
-  return data;
+  return data[0];
 }
 
 export async function getUserByid(id) {
@@ -91,7 +90,7 @@ export async function getUserByid(id) {
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
@@ -130,7 +129,7 @@ export async function updateUserIfo(id, newUserInfo) {
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
@@ -145,7 +144,22 @@ export async function getUserByLikes(userId) {
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
+export async function getAllUserWithoutMe(id) {
+  let { data, error } = await supabase
+    .from("user")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.log(error.message);
+    throw new Error(error.message);
   }
 
   return data;
@@ -183,18 +197,24 @@ export async function addPost(post) {
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
 }
 
-export async function getPost() {
-  let { data, error } = await supabase.from("posts").select("*");
+export async function getPost(topic = "") {
+  let query = supabase.from("posts").select();
+
+  if (topic) {
+    query = query.ilike("text", `%${topic}%`);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
@@ -208,7 +228,7 @@ export async function getPostsByLike(id) {
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   let postsUserLiked = data.map((post) => post.posts);
@@ -224,7 +244,7 @@ export async function getPostsById(id) {
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
@@ -235,11 +255,11 @@ export async function getPostById(id) {
     .from("posts")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
@@ -275,15 +295,15 @@ export async function addLike(newLike, userId) {
   }
 }
 
-export async function getLikes(postId) {
+export async function getLikes(userId) {
   let { data, error } = await supabase
     .from("likes")
     .select("*")
-    .eq("postId", postId);
+    .eq("userId", userId);
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
@@ -303,7 +323,7 @@ export async function getTopCreators(emailUserSession) {
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
@@ -337,6 +357,12 @@ export async function createFollow(newFollow, userId) {
 
 // برجعله اللي عاملي متابعه
 export async function getFollows(userId) {
+  if (!userId) {
+    console.warn("getSaves called without valid postId or userId", {
+      userId,
+    });
+    return [];
+  }
   const { data, error } = await supabase
     .from("follows")
     .select("*")
@@ -344,7 +370,7 @@ export async function getFollows(userId) {
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
@@ -393,18 +419,18 @@ export async function addSave(newSave, userId) {
       throw new Error("Could not remove like");
     }
   }
+  return existingSave;
 }
 
-export async function getSaves(postId, userId) {
+export async function getSaves(userId) {
   let { data, error } = await supabase
     .from("saves")
     .select("*")
-    .eq("postId", postId)
     .eq("userId", userId);
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
   }
 
   return data;
@@ -418,7 +444,87 @@ export async function getAllSaves(userId) {
 
   if (error) {
     console.log(error.message);
-    throw new Error("Could not Be created a Cabin");
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
+export async function createConversation(userId, otherId) {
+  const [id1, id2] = userId < otherId ? [userId, otherId] : [otherId, userId];
+
+  const { data: existingConversation } = await supabase
+    .from("conversation")
+    .select("*")
+    .eq("user_id", id1)
+    .eq("other_id", id2);
+
+  if (existingConversation.length === 0) {
+    const { error: insertError } = await supabase
+      .from("conversation")
+      .insert([{ user_id: id1, other_id: id2 }]);
+
+    if (insertError) {
+      console.error("Insert error:", insertError.message);
+    }
+  } else {
+    return existingConversation;
+  }
+}
+
+export async function getConversation(otherId, userId) {
+  const [id1, id2] = userId < otherId ? [userId, otherId] : [otherId, userId];
+
+  const { data, error } = await supabase
+    .from("conversation")
+    .select("*")
+    .eq("user_id", id1)
+    .eq("other_id", id2);
+  if (error) {
+    console.error(error.message);
+    throw new Error("Could not fetch conversation");
+  }
+
+  return data;
+}
+
+export async function deleteConversation(id) {
+  const { data, error } = await supabase
+    .from("conversation")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error(error.message);
+  }
+  return data;
+}
+
+export async function createMessage(newMessage) {
+  const { data, error } = await supabase
+    .from("message")
+    .insert([newMessage])
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("Could not create message");
+  }
+
+  return data;
+}
+
+export async function getAllMessage(id = null) {
+  const { data, error } = await supabase
+    .from("message")
+    .select("*")
+    .eq("conversation_id", id);
+
+  if (error) {
+    console.log(error.message);
+    throw new Error(error.message);
   }
 
   return data;

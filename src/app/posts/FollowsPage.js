@@ -1,20 +1,13 @@
-import React, { useEffect, useState } from "react";
+
 import { getTopCreators } from "../_utils/postApi";
-import { useUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import FollowContainer from "./FollowContainer";
 
-function FollowsPage() {
-  const [topCreators, setTopCreators] = useState([]);
+async function FollowsPage() {
 
-  const { user } = useUser();
-
-  useEffect(
-    function () {
-      getTopCreators(user?.primaryEmailAddress.emailAddress).then((res) =>
-        setTopCreators(res)
-      );
-    },
-    [user?.primaryEmailAddress.emailAddress]
+  const user = await currentUser();
+  const topCreators = await getTopCreators(
+    user?.primaryEmailAddress.emailAddress
   );
 
   return (

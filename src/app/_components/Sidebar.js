@@ -10,7 +10,6 @@ import { useUser } from "@clerk/nextjs";
 
 import { RiHome3Line } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
-import { IoMdAddCircleOutline } from "react-icons/io";
 import { IoBookmark } from "react-icons/io5";
 
 function Sidebar() {
@@ -22,9 +21,11 @@ function Sidebar() {
 
   useEffect(
     function () {
-      getUserByEmail(user?.primaryEmailAddress.emailAddress).then((res) =>
-        setUserId(res.id)
-      );
+      getUserByEmail(user?.primaryEmailAddress.emailAddress).then((res) => {
+        if (res.length > 0) {
+          setUserId(res[0].id);
+        }
+      });
     },
     [user?.primaryEmailAddress.emailAddress]
   );
@@ -57,7 +58,7 @@ function Sidebar() {
   ];
 
   return (
-    <div className=" rounded-lg flex items-center px-[20px] py-[30px] lg:col-span-1 italic lg:w-[300px] lg:block Lg:px-[50px] lg:py-[30px] lg:min-h-[100vh]">
+    <div className="rounded-lg flex items-center px-[20px] py-[30px] lg:col-span-1 italic lg:w-[300px] lg:block Lg:px-[50px] lg:py-[30px] lg:min-h-[100vh]">
       <Logo />
       <div className="ms-[20px] lg:w-full cursor-pointer mb-[20px] ">
         <UserAvatar />
