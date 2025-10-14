@@ -27,7 +27,7 @@ async function PostPage({ params }) {
         )}
       </div>
 
-      <div className=" lg:col-span-1 flex-col lg:ms-[-120px] lg:max-w-[400px] lg:min-h-[600px]  relative">
+      <div className=" lg:col-span-1 flex-col lg:ms-[-120px] lg:max-w-[400px] lg:min-h-full  relative">
         <div className="flex-col justify-center itmes-center lg:justify-between">
           <div className="ms-[20px] flex gap-[10px] mb-[20px] lg:mb-[40px]">
             <Link href={`/profile/${userInfo?.id}`}>

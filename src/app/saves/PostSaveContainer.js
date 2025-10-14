@@ -20,10 +20,12 @@ async function PostSaveContainer({ post }) {
   );
 
   const conversation = await getConversation(otherId.id, userSession.id);
-  const allMessages = await getAllMessage(conversation[0]?.id);
 
-  if (conversation.length > 0 && allMessages.length === 0) {
-    deleteConversation(conversation[0]?.id);
+  if (conversation.length > 0) {
+    let messages = await getAllMessage(conversation[0]?.id);
+    if (messages.length === 0) {
+      deleteConversation(conversation[0]?.id);
+    }
   }
 
   return (
