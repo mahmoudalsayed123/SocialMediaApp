@@ -39,8 +39,9 @@ const BtnAddChat = ({ otherInfo, userSessionInfo }) => {
 
   function handleChat() {
     if (userSessionInfo.id && otherInfo.id) {
-      console.log(userSessionInfo.id, otherInfo.id);  
-      console.log(conversation);
+      getConversation(otherInfo.id, userSessionInfo.id).then((res) =>
+        setConversation(res)
+      );
       if (conversation) {
         redirect(`/chat/${conversation[0].id}`);
       }
