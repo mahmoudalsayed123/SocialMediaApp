@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import {
   createConversation,
-  deleteConversation,
   getAllMessage,
   getConversation,
 } from "../_utils/postApi";
@@ -32,7 +31,6 @@ const BtnAddChat = ({ otherInfo, userSessionInfo }) => {
   useEffect(() => {
     if (
       pathName === `/profile/${otherInfo.id}` &&
-      conversation.length === 0 &&
       userSessionInfo.id !== otherInfo.id
     ) {
       createConversation(userSessionInfo.id, otherInfo.id);
@@ -41,11 +39,8 @@ const BtnAddChat = ({ otherInfo, userSessionInfo }) => {
 
   function handleChat() {
     if (userSessionInfo.id && otherInfo.id) {
-      // const newConversation = {
-      //   user_id: userSessionInfo.id,
-      //   other_id: otherInfo.id,
-      // };
-
+      console.log(userSessionInfo.id, otherInfo.id);  
+      console.log(conversation);
       if (conversation.length > 0) {
         redirect(`/chat/${conversation[0].id}`);
       }
