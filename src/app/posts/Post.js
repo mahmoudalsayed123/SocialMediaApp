@@ -7,6 +7,7 @@ import Link from "next/link";
 import SkeletonPost from "./SkeletonPost";
 
 async function Post({ post }) {
+
   const userPost = await getUserByid(post?.userPostId);
 
   return (

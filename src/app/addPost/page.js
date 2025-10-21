@@ -18,9 +18,9 @@ function AddPost() {
 
   useEffect(
     function () {
-      getUserByEmail(user?.primaryEmailAddress.emailAddress)
-        .then()
-        .then((data) => setUserActive(data));
+      getUserByEmail(user?.primaryEmailAddress.emailAddress).then((data) => {
+        setUserActive(data[0]);
+      });
     },
     [user?.primaryEmailAddress.emailAddress]
   );
