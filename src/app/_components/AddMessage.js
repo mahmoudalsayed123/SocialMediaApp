@@ -9,16 +9,16 @@ const AddMessage = ({ userId, conversationId, allMessage, userInfo }) => {
   const [message, setMessage] = useState("");
   const [allMessages, setAllMessages] = useState(allMessage);
   const inputRef = useRef(null);
-  const handleSendMessage = () => {
+ const handleSendMessage = async () => {
     const newMessage = {
       user_sender_id: userId,
       content: message,
       conversation_id: conversationId,
     };
-    createMessage(newMessage).then((res) => {
+    await createMessage(newMessage).then((res) => {
       setMessage(res.content);
     });
-    getAllMessage(conversationId).then((res) => {
+    await getAllMessage(conversationId).then((res) => {
       setAllMessages(res);
     });
     inputRef.current.value = "";

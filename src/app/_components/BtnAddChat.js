@@ -6,27 +6,10 @@ import {
   getAllMessage,
   getConversation,
 } from "../_utils/postApi";
-import { redirect, usePathname } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 
 const BtnAddChat = ({ otherInfo, userSessionInfo }) => {
   const pathName = usePathname();
-
-  const [conversation, setConversation] = useState([]);
-  const [allMessages, setAllMessages] = useState([]);
-
-  useEffect(() => {
-    getConversation(otherInfo.id, userSessionInfo.id).then((res) =>
-      setConversation(res)
-    );
-  }, [userSessionInfo.id, otherInfo.id]);
-
-  useEffect(() => {
-    if (conversation.length > 0) {
-      getAllMessage(conversation[0].id).then((res) => {
-        setAllMessages(res);
-      });
-    }
-  }, [conversation]);
 
   useEffect(() => {
     if (
@@ -35,19 +18,18 @@ const BtnAddChat = ({ otherInfo, userSessionInfo }) => {
     ) {
       createConversation(userSessionInfo.id, otherInfo.id);
     }
-  }, [userSessionInfo.id, otherInfo.id, pathName, allMessages, conversation]);
+  }, [userSessionInfo.id, otherInfo.id, pathName]);
 
-  function handleChat() {
-    if (userSessionInfo.id && otherInfo.id) {
-      getConversation(otherInfo.id, userSessionInfo.id).then((res) =>
-        setConversation(res)
-      );
-      if (conversation) {
-        redirect(`/chat/${conversation[0].id}`);
-      }
-
-      createConversation(userSessionInfo.id, otherInfo.id);
+  async function handleChat() {
+    const conversationId = await getConversation(
+      otherInfo.id,
+      userSessionInfo.id
+    );
+    if (conversationId.length > 0) {
+      redirect(`/chat/${conversationId[0].id}`);
     }
+
+    await createConversation(userSessionInfo.id, otherInfo.id);
   }
 
   return (
