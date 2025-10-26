@@ -31,10 +31,6 @@ const ChatList = () => {
             <p className="text-lg font-semibold">Last Message</p>
           </div>
         </div>
-
-
-
-        
       </div>
     </aside>
   );

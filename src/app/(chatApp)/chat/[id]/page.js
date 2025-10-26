@@ -31,7 +31,7 @@ const ChatPage = async ({ params }) => {
             )}
           </div>
 
-          <h3 className="text-3xl font-bold italic">{userInfo[0]?.userName}</h3>
+          <h3 className="text-3xl font-bold italic mt-[20px]">{userInfo[0]?.userName}</h3>
         </div>
       </div>
 

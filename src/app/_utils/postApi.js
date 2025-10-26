@@ -520,7 +520,8 @@ export async function getAllMessage(id = null) {
   const { data, error } = await supabase
     .from("message")
     .select("*")
-    .eq("conversation_id", id);
+    .eq("conversation_id", id)
+    .order("created_at", { ascending: true });
 
   if (error) {
     console.log(error.message);
@@ -528,4 +529,27 @@ export async function getAllMessage(id = null) {
   }
 
   return data;
+}
+
+export function subscribeToMessages(conversationId, onNewMessage) {
+  const channel = supabase
+    .channel(`chat-room-${conversationId}`) // نخلي الاسم unique
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "message",
+        filter: `conversation_id=eq.${conversationId}`,
+      },
+      (payload) => {
+        onNewMessage(payload.new);
+      }
+    )
+    .subscribe();
+
+  // دالة تنظيف (unsub)
+  return () => {
+    supabase.removeChannel(channel);
+  };
 }
