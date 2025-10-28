@@ -51,11 +51,14 @@ export default function SavedPost({ postUserId }) {
   }
 
   return (
-    <div onClick={handleAddSave} className="cursor-pointer">
+    <div
+      onClick={handleAddSave}
+      className="cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 group"
+    >
       {isClicked ? (
-        <IoBookmark className="text-3xl" />
+        <IoBookmark className="text-2xl sm:text-2xl lg:text-3xl text-yellow-500 group-hover:text-yellow-400" />
       ) : (
-        <IoBookmarkOutline className="text-3xl" />
+        <IoBookmarkOutline className="text-2xl sm:text-2xl lg:text-3xl text-gray-400 group-hover:text-yellow-400" />
       )}
     </div>
   );

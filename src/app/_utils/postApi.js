@@ -309,12 +309,6 @@ export async function getLikes(userId) {
   return data;
 }
 
-// Follower = اللي بيتابعني.
-
-// Following = اللي أنا متابعه.
-
-// Followed = الشخص اللي اتعمله متابعة (يعني النتيجة إن حد بقى متابَع).
-
 export async function getTopCreators(emailUserSession) {
   let { data, error } = await supabase
     .from("user")
@@ -329,12 +323,18 @@ export async function getTopCreators(emailUserSession) {
   return data;
 }
 
-export async function createFollow(newFollow, userId) {
+// Follower = اللي بيتابعني.
+
+// Following = اللي أنا متابعه.
+
+// Followed = الشخص اللي اتعمله متابعة (يعني النتيجة إن حد بقى متابَع).
+
+export async function createFollow(newFollow) {
   const { data: existingUser } = await supabase
     .from("follows")
     .select("*")
     .eq("followedId", newFollow.followedId)
-    .eq("followerId", userId)
+    .eq("followerId", newFollow.followerId)
     .single();
 
   if (!existingUser) {

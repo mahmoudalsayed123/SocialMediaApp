@@ -58,31 +58,73 @@ function Sidebar() {
   ];
 
   return (
-    <div className="rounded-lg flex items-center px-[20px] py-[30px] lg:col-span-1 italic lg:w-[300px] lg:block Lg:px-[50px] lg:py-[30px] lg:min-h-[100vh]">
-      <Logo />
-      <div className="ms-[20px] lg:w-full cursor-pointer mb-[20px] ">
-        <UserAvatar />
+    <div className="lg:col-span-1 lg:w-[300px] lg:block lg:min-h-screen border-e">
+      {/* Mobile Bottom Navigation */}
+
+      <div className="lg:hidden  bottom-0 left-0 right-0  backdrop-blur-xl border-t border-dark-700 z-50 shadow-glow">
+        {/* User Avatar Section */}
+        {/* <div className="mb-8 px-4 py-3 rounded-xl bg-dark-800/50 border border-dark-700 hover:bg-dark-800 hover:border-primary-500/30 transition-all">
+          <UserAvatar />
+        </div> */}
+        <ul className="flex items-center justify-around px-2 py-2 mt-[20px]">
+          <>
+            <li className="me-[10px] ms-[10px]">
+              <UserAvatar />
+            </li>
+            {linkes.map((link) => (
+              <li key={link.id}>
+                <Link
+                  href={`${link.route}`}
+                  className={`flex flex-col items-center justify-center rounded-xl px-[20px] py-[8px] transition-all duration-300 hover:bg-violet-700 ${
+                    pathName === link.route
+                      ? "bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-glow bg-violet-700"
+                      : "text-dark-400 hover:text-white hover:bg-dark-800 hover:bg-violet-700"
+                  }`}
+                >
+                  <span className="text-xl">{link.icons}</span>
+                </Link>
+              </li>
+            ))}
+          </>
+        </ul>
       </div>
-      <ul className=" w-full flex justify-evenly lg:justify-center items-center lg:gap-[20px] lg:flex-col lg:mt-[20px] ">
-        {linkes.map((link) => (
-          <li
-            className={
-              pathName === link.route
-                ? "lg:text-xl lg:w-full px-[20px] py-[10px] h-[50px] lg:ps-[40px] flex  items-center rounded-lg transition-all duration-300  cursor-pointer bg-violet-600 hover:bg-violet-600 "
-                : "lg:text-xl lg:w-full px-[20px] py-[10px] h-[50px] lg:ps-[40px] flex  items-center rounded-lg transition-all duration-300  cursor-pointer hover:bg-violet-600 "
-            }
-            key={link.id}
-          >
+
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block fixed top-0 left-0 bg-dark-900/50 backdrop-blur-md border-r border-dark-700 min-h-screen px-6 py-8 w-[300px]">
+        {/* Logo */}
+        <div className="mb-8">
+          <Logo />
+        </div>
+
+        {/* User Avatar Section */}
+        <div className="mb-8 px-4 py-3 rounded-xl bg-dark-800/50 border border-dark-700 hover:bg-dark-800 hover:border-primary-500/30 transition-all">
+          <UserAvatar />
+        </div>
+
+        {/* Navigation Links */}
+        <nav className="space-y-2">
+          {linkes.map((link) => (
             <Link
+              key={link.id}
               href={`${link.route}`}
-              className=" flex items-center gap-[10px] text-white font-semibold cursor-pointer transition-all rounded-lg duration-300 "
+              className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 group hover:bg-violet-700/50 ${
+                pathName === link.route
+                  ? " bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-glow bg-violet-700"
+                  : "text-dark-400 hover:text-white hover:bg-dark-800 hover:bg-violet-700 "
+              }`}
             >
-              <p className="block">{link.icons}</p>
-              <p className="hidden lg:block">{link.name}</p>
+              <span
+                className={`text-xl transition-transform group-hover:scale-110 ${
+                  pathName === link.route ? "text-white" : "text-dark-400"
+                }`}
+              >
+                {link.icons}
+              </span>
+              <span className="font-semibold text-base">{link.name}</span>
             </Link>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </nav>
+      </div>
     </div>
   );
 }

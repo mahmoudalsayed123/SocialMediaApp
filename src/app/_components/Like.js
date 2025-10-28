@@ -46,12 +46,12 @@ function Like({ postUserId }) {
   return (
     <div
       onClick={handleAddLike}
-      className="cursor-pointer transition-all duration-300 flex justify-center items-center"
+      className="cursor-pointer transition-all duration-300 flex justify-center items-center hover:scale-110 active:scale-95 group"
     >
       {isClicked ? (
-        <FaHeart className="text-red-600 text-3xl" />
+        <FaHeart className="text-red-500 text-2xl sm:text-2xl lg:text-3xl group-hover:text-red-400" />
       ) : (
-        <FaRegHeart className="text-3xl" />
+        <FaRegHeart className="text-2xl sm:text-2xl lg:text-3xl text-gray-400 group-hover:text-red-400" />
       )}
     </div>
   );

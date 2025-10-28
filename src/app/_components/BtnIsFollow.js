@@ -1,15 +1,20 @@
 "use client";
 
-import { createFollow } from "../_utils/postApi";
+import { useState } from "react";
+import { createFollow, getTopCreators } from "../_utils/postApi";
+import { useUser } from "@clerk/nextjs";
 
 const BtnIsFollow = ({ isFollow, userId, creator }) => {
-  function handlefollowed() {
+  const [isFollowing, setIsFollowing] = useState(isFollow);
+
+  const { user } = useUser();
+  async function handlefollowed() {
     if (userId) {
       const newFollow = {
-        followerId: userId,
-        followedId: creator?.id,
+        followerId: creator.id,
+        followedId: userId?.id,
       };
-      createFollow(newFollow, userId);
+      await createFollow(newFollow, userId);
     }
   }
   return (

@@ -32,47 +32,55 @@ async function Profile({ params }) {
   const followers = await getFollowers(userInfo?.id);
 
   return (
-    <section className="px-[20px] lg:ms-[-250px] lg:col-span-2 lg:px-[100px] lg:py-[50px] relative">
+    <section className="px-[15px] sm:px-[20px] lg:ms-[-250px] lg:col-span-2 lg:px-[100px] py-[30px] sm:py-[40px] lg:py-[50px] relative">
       {/* Information About User */}
 
-      <div className="mt-[20px] flex gap-[10px] lg:gap-[30px] lg:mb-[100px] mb-[30px]">
-        <div>
+      <div className="mt-[15px] sm:mt-[20px] flex gap-[8px] sm:gap-[10px] lg:gap-[30px] lg:mb-[100px] mb-[20px] sm:mb-[30px]">
+        <div className="flex-shrink-0">
           {userInfo?.avatar ? (
             <Image
               src={userInfo?.avatar}
               width={400}
               height={400}
               alt="userAvatar"
-              className="me-[10px] lg:me-0 w-[80px] h-[80px] lg:w-[100px] lg:h-[100px] rounded-full"
+              className="me-[5px] sm:me-[10px] lg:me-0 w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] lg:w-[100px] lg:h-[100px] rounded-full"
             />
           ) : (
-            <div className="w-[60px] h-[60px] lg:w-[80px] lg:h-[80px] rounded-full animate-pulse bg-slate-600"></div>
+            <div className="w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] lg:w-[80px] lg:h-[80px] rounded-full animate-pulse bg-slate-600"></div>
           )}
         </div>
 
-        <div>
-          <h2 className="text-3xl font-bold mb-[20px]">{userInfo?.userName}</h2>
+        <div className="flex-1 min-w-0">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-[10px] sm:mb-[15px] lg:mb-[20px] truncate">
+            {userInfo?.userName}
+          </h2>
 
-          <div className="flex items-center gap-[15px] lg:gap-[30px]">
+          <div className="flex items-center gap-[10px] sm:gap-[15px] lg:gap-[30px] flex-wrap">
             <p className="text-nowrap">
-              <span className="text-violet-400 text-lg font-semibold">
+              <span className="text-violet-400 text-sm sm:text-base lg:text-lg font-semibold">
                 {posts.length}
               </span>{" "}
-              <span className="text-md font-bold">Posts</span>
+              <span className="text-xs sm:text-sm lg:text-md font-bold">
+                Posts
+              </span>
             </p>
 
             <p className="text-nowrap">
-              <span className="text-violet-400 text-lg font-semibold">
+              <span className="text-violet-400 text-sm sm:text-base lg:text-lg font-semibold">
                 {following.length}
               </span>{" "}
-              <span className="text-md font-bold">Following</span>
+              <span className="text-xs sm:text-sm lg:text-md font-bold">
+                Following
+              </span>
             </p>
 
             <p className="text-nowrap">
-              <span className="text-violet-400 text-lg font-semibold">
+              <span className="text-violet-400 text-sm sm:text-base lg:text-lg font-semibold">
                 {followers.length}
               </span>{" "}
-              <span className="text-md font-bold">Followers</span>
+              <span className="text-xs sm:text-sm lg:text-md font-bold">
+                Followers
+              </span>
             </p>
           </div>
           {userSessionInfo.id !== userInfo.id && (
@@ -83,23 +91,23 @@ async function Profile({ params }) {
           )}
 
           {userSessionInfo.id === userInfo.id ? (
-            <div className="flex items-center gap-[15px]">
+            <div className="flex items-center gap-[10px] sm:gap-[15px] flex-wrap mt-[15px] sm:mt-[20px]">
               <Link href="/addPost" className="block">
-                <button className="mt-[20px] px-[10px] py-[5px] lg:px-[20px] lg:py-[15px] rounded-lg w-fit flex items-center bg-violet-600 cursor-pointer lg:absolute lg:top-[50px] lg:right-[100px]">
+                <button className="px-[8px] sm:px-[10px] lg:px-[20px] py-[4px] sm:py-[5px] lg:py-[15px] rounded-lg w-fit flex items-center bg-violet-600 cursor-pointer hover:bg-violet-500 transition-colors lg:absolute lg:top-[50px] lg:right-[100px]">
                   <span>
-                    <IoMdAddCircleOutline className="text-xl lg:text-3xl font-bold me-[8px]" />
+                    <IoMdAddCircleOutline className="text-lg sm:text-xl lg:text-3xl font-bold me-[4px] sm:me-[8px]" />
                   </span>
-                  <span className="text-md lg:text-xl font-bold text-nowrap">
+                  <span className="text-xs sm:text-sm lg:text-xl font-bold text-nowrap">
                     Add Post
                   </span>
                 </button>
               </Link>
               <Link href="/editProfile" className="block">
-                <button className="mt-[20px] px-[10px] py-[5px] lg:px-[20px] lg:py-[15px] rounded-lg w-fit flex items-center bg-violet-600 cursor-pointer lg:absolute lg:top-[50px] lg:right-[300px]">
+                <button className="px-[8px] sm:px-[10px] lg:px-[20px] py-[4px] sm:py-[5px] lg:py-[15px] rounded-lg w-fit flex items-center bg-violet-600 cursor-pointer hover:bg-violet-500 transition-colors lg:absolute lg:top-[50px] lg:right-[300px]">
                   <span>
-                    <FaRegEdit className="text-xl lg:text-3xl font-bold me-[8px]" />
+                    <FaRegEdit className="text-lg sm:text-xl lg:text-3xl font-bold me-[4px] sm:me-[8px]" />
                   </span>
-                  <span className="text-md lg:text-xl font-bold text-nowrap">
+                  <span className="text-xs sm:text-sm lg:text-xl font-bold text-nowrap">
                     Edit Profile
                   </span>
                 </button>

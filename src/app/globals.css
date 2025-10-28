@@ -4,12 +4,13 @@
 @custom-variant dark (&:is(.dark *));
 
 body {
-  background-color: #000;
-  color: white;
+  background: linear-gradient(to bottom, #0a0a0f, #1a1a2e, #16213e);
+  color: #ffffff;
+  min-height: 100vh;
 }
 
 .like:hover .likes {
-  @apply block absolute right-[0px] top-[40px] flex justify-between items-center px-[20px] py-[10px] rounded-full gap-10 transition-all duration-500
+  @apply block absolute right-[0px] top-[40px] flex justify-between items-center px-[20px] py-[10px] rounded-full gap-10 transition-all duration-500;
 }
 
 @theme inline {
