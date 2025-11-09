@@ -3,17 +3,9 @@
 import { useUser } from "@clerk/nextjs";
 import { createFollow, getFollows, getUserByEmail } from "../_utils/postApi";
 import { useEffect, useState } from "react";
-// import { currentUser } from "@clerk/nextjs/server";
-// import BtnIsFollow from "./BtnIsFollow";
+
 
 const IsFollow = ({ creator }) => {
-  // const user = await currentUser();
-  // const userId = await getAllUserInfoByEmail(
-  //   user?.primaryEmailAddress.emailAddress
-  // );
-  // const follows = await getFollows(userId?.id);
-  // const followsArr = follows.find((e) => creator.id === e.followedId);
-  // const isFollow = followsArr?.followedId === creator.id;
 
   const [userId, setUserId] = useState(null);
   const [isFollow, setIsFollow] = useState(false);
@@ -32,9 +24,8 @@ const IsFollow = ({ creator }) => {
           const x = res.some((e) => e.followedId === creator.id);
           if (x) {
             setIsFollow(true);
-            console.log("followed");
           }
-          // setIsFollow(x.followedId === creator.id);
+
         });
       }
 

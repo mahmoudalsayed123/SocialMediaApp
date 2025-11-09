@@ -25,10 +25,10 @@ const queryClient = new QueryClient({
   },
 });
 
-export const metadata = {
-  title: "social-team",
-  description: "A social media platform with multiple features",
-};
+// export const metadata = {
+//   title: "social-team",
+//   description: "A social media platform with multiple features",
+// };
 
 export default function RootLayout({ children }) {
   return (
