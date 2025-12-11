@@ -2,6 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 
 const InputSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,14 +21,23 @@ const InputSearch = () => {
   }, [searchQuery, filterPosts, router]);
 
   return (
-    <input
-      onChange={(e) => setSearchQuery(e.target.value)}
-      name="searchPosts"
-      type="text"
-      placeholder="Search For Posts"
-      className="w-full p-3 sm:p-4 lg:p-5 px-5 sm:px-6 lg:px-8 text-base sm:text-lg lg:text-xl rounded-3xl sm:rounded-4xl lg:rounded-6xl outline-0 mb-4 sm:mb-5 lg:mb-6 bg-slate-900/70 border border-slate-700/50 text-white placeholder:text-gray-400 focus:border-violet-500 focus:bg-slate-900 transition-all"
-      defaultValue={filterPosts}
-    />
+    <div className="relative mb-[20px]">
+      <input
+        onChange={(e) => setSearchQuery(e.target.value)}
+        name="searchPosts"
+        type="text"
+        placeholder="Search For Posts"
+        className="w-full px-[40px] py-[12px] outline-0 rounded-md bg-gray-800 border border-gray-800 transition-all duration-300 focus:border-gray-600 placeholder:text-md "
+        defaultValue={filterPosts}
+      />
+      <Image
+        src="/assets/icons/search.svg"
+        alt="search"
+        width={20}
+        height={20}
+        className="absolute top-[50%] left-[10px] transform translate-y-[-50%] "
+      />
+    </div>
   );
 };
 

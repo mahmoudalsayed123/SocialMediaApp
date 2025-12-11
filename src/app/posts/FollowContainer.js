@@ -15,7 +15,7 @@ async function FollowContainer({ creator }) {
   const user = await currentUser();
 
   const userSession = await getAllUserInfoByEmail(
-    user?.primaryEmailAddress?.emailAddress
+    user?.primaryEmailAddress?.emailAddress,
   );
 
   const conversation = await getConversation(creator.id, userSession.id);
@@ -28,28 +28,32 @@ async function FollowContainer({ creator }) {
   }
 
   return (
-    <div className="col-span-1 flex-col justify-center items-center italic ">
+    <div className=" text-center col-span-1 flex-col justify-center items-center italic ">
       {creator?.avatar ? (
         <>
-          <div className="flex-col justify-center items-center gap-[10px]">
+          <div className="flex-col ">
             <Link href={`/profile/${creator.id}`}>
               {creator?.avatar ? (
                 <Image
                   src={creator?.avatar || null}
                   alt="avatar"
-                  width={200}
-                  height={200}
-                  className="w-[50px] h-[50px] rounded-full mb-3 ms-[10px]"
+                  width={50}
+                  height={50}
+                  className="w-[50px] h-[50px] mb-[10px] mx-auto rounded-full"
                 />
               ) : (
                 <div className="w-[50px] h-[50px] rounded-full mb-3 bg-slate-600 animate-pulse"></div>
               )}
             </Link>
-
-            <h3 className="text-xl font-bold mb-[15px]">{creator.userName}</h3>
           </div>
+          <h3 className="text-md font-bold mb-[15px] ms-[4px] line-clamp-1">
+            {creator.userName}
+          </h3>
 
-          <IsFollow creator={creator} />
+          <IsFollow
+            creator={creator}
+            className="bg-violet-400 rounded-md ms-[4px] px-[10px] py-[3px] text-md font-bold cursor-pointer transition-all duration-300 hover:bg-violet-500"
+          />
         </>
       ) : (
         <SkeletonFollow />

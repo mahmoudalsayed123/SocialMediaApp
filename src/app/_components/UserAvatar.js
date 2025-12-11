@@ -13,14 +13,14 @@ function UserAvatar() {
   useEffect(
     function () {
       getAllUserInfoByEmail(user?.primaryEmailAddress.emailAddress).then(
-        (res) => setUserInfo(res)
+        (res) => setUserInfo(res),
       );
     },
-    [user?.primaryEmailAddress.emailAddress]
+    [user?.primaryEmailAddress.emailAddress],
   );
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 md:mb-[30px]">
       {userInfo?.avatar ? (
         <>
           <Link
@@ -31,12 +31,12 @@ function UserAvatar() {
               src={userInfo?.avatar}
               width={500}
               height={500}
-              className="w-[45px] h-[45px] rounded-full border-2 border-slate-600"
+              className="w-[40px] h-[40px] md:w-[45px] md:h-[45px] rounded-full border-2 border-slate-600"
               alt="avatar"
             />
           </Link>
-          <div className="hidden lg:block flex-1 min-w-0">
-            <h2 className="text-base font-semibold text-white truncate hover:text-violet-400 transition-colors cursor-pointer">
+          <div className="hidden md:block flex-1 min-w-0">
+            <h2 className="text-lg font-bold mb-[10px] text-white truncate hover:text-violet-400 transition-colors cursor-pointer">
               {userInfo?.userName}
             </h2>
           </div>

@@ -7,6 +7,7 @@ import {
   getConversation,
 } from "../_utils/postApi";
 import { redirect, usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 
 const BtnAddChat = ({ otherInfo, userSessionInfo }) => {
   const pathName = usePathname();
@@ -23,7 +24,7 @@ const BtnAddChat = ({ otherInfo, userSessionInfo }) => {
   async function handleChat() {
     const conversationId = await getConversation(
       otherInfo.id,
-      userSessionInfo.id
+      userSessionInfo.id,
     );
     if (conversationId.length > 0) {
       redirect(`/chat/${conversationId[0].id}`);
@@ -35,14 +36,18 @@ const BtnAddChat = ({ otherInfo, userSessionInfo }) => {
   return (
     <button
       onClick={handleChat}
-      className="mt-[20px] px-[10px] py-[5px] lg:px-[20px] lg:py-[15px] rounded-lg w-fit flex items-center bg-violet-600 cursor-pointer lg:absolute lg:top-[50px] lg:right-[100px]"
+      className="mb-[10px] sm:mb-0 flex items-center gap-[5px]  bg-gray-800 px-[10px] py-[5px] md:px-[10px] md:py-[5px] lg:px-[20px] lg:py-[8px]  rounded-md me-[5px]"
     >
-      <span>
-        <IoChatbubbleEllipsesOutline className="text-xl lg:text-3xl font-bold me-[8px]" />
-      </span>
-      <span className="text-md lg:text-xl font-bold text-nowrap">
-        Chat {otherInfo.userName}
-      </span>
+      <Image
+        src="/assets/icons/chat.svg"
+        alt="chat"
+        width={15}
+        height={15}
+        className="w-[15px] h-[15px] md:w-[20px] md:h-[20px]"
+      />
+      <p className="text-sm md:text-md lg:text-lg font-semibold line-clamp-1">
+        Chat
+      </p>
     </button>
   );
 };

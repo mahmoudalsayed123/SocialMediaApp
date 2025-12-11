@@ -1,8 +1,10 @@
-import Like from "@/app/_components/Like";
-import SavedPost from "@/app/_components/SavedPost";
-import { getPostById, getUserByid } from "@/app/_utils/postApi";
+import Like from "../../_components/Like";
+import SavedPost from "../../_components/SavedPost";
+import { getPostById, getUserByid } from "../../_utils/postApi";
 import Image from "next/image";
 import Link from "next/link";
+import { formatDateTime } from "../../../lib/utils";
+import Back from "@/app/_components/Back";
 
 async function PostPage({ params }) {
   const { id } = await params;
@@ -10,27 +12,30 @@ async function PostPage({ params }) {
   const userInfo = await getUserByid(post?.userPostId);
 
   return (
-    <div className="flex-col-reverse justify-center items-center lg:ms-[-200px] lg:grid lg:grid-cols-2 lg:col-span-2 lg:py-[100px] ">
-      {/* <IoArrowBack /> */}
+    <>
+      <Back />
+      <div className=" mt-[50px] md:mt-[100px] px-[20px] md:flex md:justify-center md:items-start md:gap-[10px] ">
+        {/* <IoArrowBack /> */}
 
-      <div className=" mb-[30px] px-[20px] lg:mb-0 lg:col-span-1">
-        {post?.content ? (
-          <Image
-            src={post?.content}
-            width={500}
-            height={500}
-            alt="content"
-            className="rounded-lg lg:max-h-[600px]"
-          />
-        ) : (
-          <div className="lg:mb-0 lg:col-span-1 rounded-lg bg-slate-600 animate-pulse"></div>
-        )}
-      </div>
+        <div className=" mb-[50px] overflow-hidden sm:w-[500px] lg:w-[400px] lg:h-[370px] sm:m-auto sm:mb-[50px] md:m-0 border border-[#1F1F22] px-[20px] py-[20px] rounded-lg ">
+          {post?.content ? (
+            <Image
+              src={post?.content}
+              width={300}
+              height={300}
+              alt="content"
+              className="w-full h-auto max-h-[500px] sm:w-[500px] sm:h-[400px] md:w-[300px] md:h-[300px] lg:w-[400px] lg:h-[330px] sm:m-auto md:m-0 object-fill transition-transform hover:scale-[1.01] rounded-lg"
+            />
+          ) : (
+            <div className="lg:mb-0 lg:col-span-1 rounded-lg bg-slate-600 animate-pulse"></div>
+          )}
+        </div>
 
-      <div className=" lg:col-span-1 flex-col lg:ms-[-120px] lg:max-w-[400px] lg:min-h-full  relative">
-        <div className="flex-col justify-center itmes-center lg:justify-between">
-          <div className="ms-[20px] flex gap-[10px] mb-[20px] lg:mb-[40px]">
-            <Link href={`/profile/${userInfo?.id}`}>
+        <div className="md:relative sm:w-[500px] md:h-[342px] lg:h-[370px] sm:m-auto md:m-0  border border-[#1F1F22] px-[20px] py-[20px] rounded-lg">
+          {/* UserImage, userName, Date */}
+          <div className="flex items-center gap-[15px]">
+            {/* UserImage */}
+            <Link href={`/profile/${userInfo?.id}`} className="block">
               {userInfo?.avatar ? (
                 <Image
                   src={userInfo?.avatar}
@@ -40,26 +45,35 @@ async function PostPage({ params }) {
                   className="w-[60px] h-[60px] rounded-full"
                 />
               ) : (
-                <div className="w-[100px] h-[100px] lg:w-[100px] lg:h-[100px] rounded-full animate-pulse bg-slate-600"></div>
+                <Image
+                  src="/assets/icons/profile.svg"
+                  width={300}
+                  height={300}
+                  alt="avatar"
+                  className="w-[60px] h-[60px] rounded-full"
+                />
               )}
             </Link>
-
-            <h2 className="text-xl font-bold ">{userInfo?.userName}</h2>
+            {/* userName, Date*/}
+            <div>
+              <h2 className="text-xl font-bold ">{userInfo?.userName}</h2>
+              <p className="text-sm text-gray-400">
+                {formatDateTime(userInfo.created_at)}
+              </p>
+            </div>
           </div>
-
-          <div>
-            <p className="italic text-xl font-semibold ms-[50px] mt-[20px] mb-[30px]">
-              {post?.text}
-            </p>
+          {/* Description */}
+          <div className="ms-[30px] mt-[30px] mb-[50px]">
+            <p className="italic text-lg font-semibold">{post?.text}</p>
           </div>
-        </div>
-
-        <div className="flex justify-between items-center px-[20px] lg:absolute lg:bottom-[20px] lg:left-0 w-full">
-          <Like postUserId={post?.id} />
-          <SavedPost postUserId={post?.id} />
+          {/* Like, Save */}
+          <div className="flex items-center justify-between px-[10px] md:absolute md:bottom-[20px] md:left-0 md:w-full">
+            <Like postUserId={post?.id} />
+            <SavedPost postUserId={post?.id} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

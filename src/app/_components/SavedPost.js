@@ -9,6 +9,7 @@ import {
 } from "../_utils/postApi";
 import { useEffect, useState } from "react";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
+import Image from "next/image";
 
 export default function SavedPost({ postUserId }) {
   const { user } = useUser();
@@ -23,7 +24,7 @@ export default function SavedPost({ postUserId }) {
         }
       });
     },
-    [user?.primaryEmailAddress?.emailAddress]
+    [user?.primaryEmailAddress?.emailAddress],
   );
 
   useEffect(() => {
@@ -41,7 +42,6 @@ export default function SavedPost({ postUserId }) {
 
   function handleAddSave() {
     setIsClicked((prev) => !prev);
-    console.log(userSession);
     const newSave = {
       postId: postUserId,
       userId: userSession,
@@ -56,9 +56,19 @@ export default function SavedPost({ postUserId }) {
       className="cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 group"
     >
       {isClicked ? (
-        <IoBookmark className="text-2xl sm:text-2xl lg:text-3xl text-yellow-500 group-hover:text-yellow-400" />
+        <Image
+          src="/assets/icons/saved.svg"
+          alt="save post"
+          width={25}
+          height={25}
+        />
       ) : (
-        <IoBookmarkOutline className="text-2xl sm:text-2xl lg:text-3xl text-gray-400 group-hover:text-yellow-400" />
+        <Image
+          src="/assets/icons/save.svg"
+          alt="save post"
+          width={25}
+          height={25}
+        />
       )}
     </div>
   );

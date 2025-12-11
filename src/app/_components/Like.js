@@ -3,6 +3,7 @@ import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { addLike, getLikes, getUserByEmail } from "../_utils/postApi";
+import Image from "next/image";
 
 function Like({ postUserId }) {
   const { user } = useUser();
@@ -17,7 +18,7 @@ function Like({ postUserId }) {
         }
       });
     },
-    [user?.primaryEmailAddress?.emailAddress]
+    [user?.primaryEmailAddress?.emailAddress],
   );
 
   useEffect(() => {
@@ -49,9 +50,14 @@ function Like({ postUserId }) {
       className="cursor-pointer transition-all duration-300 flex justify-center items-center hover:scale-110 active:scale-95 group"
     >
       {isClicked ? (
-        <FaHeart className="text-red-500 text-2xl sm:text-2xl lg:text-3xl group-hover:text-red-400" />
+        <Image
+          src="/assets/icons/liked.svg"
+          alt="like"
+          width={25}
+          height={25}
+        />
       ) : (
-        <FaRegHeart className="text-2xl sm:text-2xl lg:text-3xl text-gray-400 group-hover:text-red-400" />
+        <Image src="/assets/icons/like.svg" alt="like" width={25} height={25} />
       )}
     </div>
   );

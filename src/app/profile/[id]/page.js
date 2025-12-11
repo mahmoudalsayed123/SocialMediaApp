@@ -13,10 +13,9 @@ import Link from "next/link";
 import ProfilePosts from "../../_components/ProfilePosts";
 import BtnAddChat from "../../_components/BtnAddChat";
 
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { FaRegEdit } from "react-icons/fa";
-
 import { currentUser } from "@clerk/nextjs/server";
+import Back from "@/app/_components/Back";
+import IsFollow from "@/app/_components/IsFollow";
 
 async function Profile({ params }) {
   const { id } = await params;
@@ -26,107 +25,103 @@ async function Profile({ params }) {
   const posts = await getPostsById(userInfo.id);
   const postUserLiked = await getPostsByLike(userInfo.id);
   const userSessionInfo = await getAllUserInfoByEmail(
-    user?.primaryEmailAddress.emailAddress
+    user?.primaryEmailAddress.emailAddress,
   );
   const following = await getFollows(userInfo?.id);
   const followers = await getFollowers(userInfo?.id);
 
   return (
-    <section className="px-[15px] sm:px-[20px] lg:ms-[-250px] lg:col-span-2 lg:px-[100px] py-[30px] sm:py-[40px] lg:py-[50px] relative">
-      {/* Information About User */}
+    <>
+      <Back />
+      <section className="px-[15px] py-[30px] md:p-[30px]">
+        {/* Information About User */}
 
-      <div className="mt-[15px] sm:mt-[20px] flex gap-[8px] sm:gap-[10px] lg:gap-[30px] lg:mb-[100px] mb-[20px] sm:mb-[30px]">
-        <div className="flex-shrink-0">
-          {userInfo?.avatar ? (
-            <Image
-              src={userInfo?.avatar}
-              width={400}
-              height={400}
-              alt="userAvatar"
-              className="me-[5px] sm:me-[10px] lg:me-0 w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] lg:w-[100px] lg:h-[100px] rounded-full"
-            />
-          ) : (
-            <div className="w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] lg:w-[80px] lg:h-[80px] rounded-full animate-pulse bg-slate-600"></div>
-          )}
-        </div>
-
-        <div className="flex-1 min-w-0">
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-[10px] sm:mb-[15px] lg:mb-[20px] truncate">
-            {userInfo?.userName}
-          </h2>
-
-          <div className="flex items-center gap-[10px] sm:gap-[15px] lg:gap-[30px] flex-wrap">
-            <p className="text-nowrap">
-              <span className="text-violet-400 text-sm sm:text-base lg:text-lg font-semibold">
-                {posts.length}
-              </span>{" "}
-              <span className="text-xs sm:text-sm lg:text-md font-bold">
-                Posts
-              </span>
-            </p>
-
-            <p className="text-nowrap">
-              <span className="text-violet-400 text-sm sm:text-base lg:text-lg font-semibold">
-                {following.length}
-              </span>{" "}
-              <span className="text-xs sm:text-sm lg:text-md font-bold">
-                Following
-              </span>
-            </p>
-
-            <p className="text-nowrap">
-              <span className="text-violet-400 text-sm sm:text-base lg:text-lg font-semibold">
-                {followers.length}
-              </span>{" "}
-              <span className="text-xs sm:text-sm lg:text-md font-bold">
-                Followers
-              </span>
-            </p>
-          </div>
-          {userSessionInfo.id !== userInfo.id && (
-            <BtnAddChat
-              otherInfo={userInfo}
-              userSessionInfo={userSessionInfo}
-            />
-          )}
-
-          {userSessionInfo.id === userInfo.id ? (
-            <div className="flex items-center gap-[10px] sm:gap-[15px] flex-wrap mt-[15px] sm:mt-[20px]">
-              <Link href="/addPost" className="block">
-                <button className="px-[8px] sm:px-[10px] lg:px-[20px] py-[4px] sm:py-[5px] lg:py-[15px] rounded-lg w-fit flex items-center bg-violet-600 cursor-pointer hover:bg-violet-500 transition-colors lg:absolute lg:top-[50px] lg:right-[100px]">
-                  <span>
-                    <IoMdAddCircleOutline className="text-lg sm:text-xl lg:text-3xl font-bold me-[4px] sm:me-[8px]" />
-                  </span>
-                  <span className="text-xs sm:text-sm lg:text-xl font-bold text-nowrap">
-                    Add Post
-                  </span>
-                </button>
-              </Link>
-              <Link href="/editProfile" className="block">
-                <button className="px-[8px] sm:px-[10px] lg:px-[20px] py-[4px] sm:py-[5px] lg:py-[15px] rounded-lg w-fit flex items-center bg-violet-600 cursor-pointer hover:bg-violet-500 transition-colors lg:absolute lg:top-[50px] lg:right-[300px]">
-                  <span>
-                    <FaRegEdit className="text-lg sm:text-xl lg:text-3xl font-bold me-[4px] sm:me-[8px]" />
-                  </span>
-                  <span className="text-xs sm:text-sm lg:text-xl font-bold text-nowrap">
-                    Edit Profile
-                  </span>
-                </button>
-              </Link>
+        <div className="flex justify-between items-center mb-[30px]">
+          {/* Image Container + UserName + Number Of { post, followering, follower } */}
+          <div className="flex items-center gap-[10px]">
+            {/* Image Container */}
+            <div>
+              <Image
+                src={userInfo?.avatar}
+                width={60}
+                height={60}
+                alt="userAvatar"
+                className="w-[60px] h-[60px] rounded-full"
+              />
             </div>
-          ) : (
-            ""
-          )}
+            {/*UserName + Number Of { post, followering, follower }  */}
+            <div className="flex-col items-center">
+              {/*  UserName */}
+              <h2 className="w-fit font-bold text-lg mb-[10px] line-clamp-1">
+                {userInfo?.userName}
+              </h2>
+              {/*  Number Of { post, followering, follower } */}
+              <div className="flex items-center gap-[10px]">
+                <p className="font-bold text-violet-500 flex items-center gap-[5px]">
+                  {posts.length}{" "}
+                  <span className="text-white text-md font-medium block ">
+                    Posts
+                  </span>
+                </p>
+                <p className="hidden sm:flex font-bold text-violet-500 items-center gap-[5px]">
+                  {following.length}
+                  <span className="text-white text-md font-medium block">
+                    Following
+                  </span>
+                </p>
+                <p className="font-bold text-violet-500 flex items-center gap-[5px]">
+                  {followers.length}
+                  <span className="text-white text-md font-medium block">
+                    Followers
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Container Of Add Post And Update Profile And Chat */}
+          <div className=" sm:flex items-center justify-center sm:gap-[5px]">
+            {userSessionInfo.id !== userInfo.id && (
+              <>
+                <BtnAddChat
+                  otherInfo={userInfo}
+                  userSessionInfo={userSessionInfo}
+                />
+                <IsFollow
+                  creator={userInfo}
+                  className="flex items-center gap-[5px]  bg-gray-800 px-[10px] py-[5px] md:px-[10px] md:py-[5px] lg:px-[20px] lg:py-[8px] lg:text-lg rounded-md me-[5px] text-sm md:text-md font-semibold tracking-wider"
+                />
+              </>
+            )}
+            {userSessionInfo.id === userInfo.id ? (
+              // btn edite profile and add post
+              <Link
+                href="/editProfile"
+                className="flex items-center gap-[8px] bg-gray-800 px-[10px] py-[5px] md:px-[15px] md:py-[5px] rounded-md"
+              >
+                <Image
+                  src="/assets/icons/edit.svg"
+                  alt="addPost"
+                  width={15}
+                  height={15}
+                  className="w-[15px] h-[15px] md:w-[20px] md:h-[20px]"
+                />
+                <p className="text-sm md:text-lg font-semibold">Edite</p>
+              </Link>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Posts Of User + Liked Posts */}
-
-      <ProfilePosts
-        posts={posts}
-        postUserLiked={postUserLiked}
-        following={following}
-      />
-    </section>
+        {/* Posts Of User + Liked Posts */}
+        <ProfilePosts
+          posts={posts}
+          postUserLiked={postUserLiked}
+          following={following}
+        />
+      </section>
+    </>
   );
 }
 

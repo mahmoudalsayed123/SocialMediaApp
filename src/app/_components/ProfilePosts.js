@@ -33,7 +33,7 @@ const ProfilePosts = ({ posts, postUserLiked, following }) => {
   const [follow, setFollow] = useState(false);
   return (
     <div>
-      <ul className="flex items-center gap-[10px] lg:gap-[30px] mb-[40px]">
+      <ul className="flex items-center gap-[20px] mb-[40px] ">
         {arr.map((item) => (
           <li
             key={item.id}
@@ -52,29 +52,24 @@ const ProfilePosts = ({ posts, postUserLiked, following }) => {
                 setPostsLiked(false);
               }
             }}
-            className="cursor-pointer  bg-gray-900 px-[10px] py-[8px] lg:px-[60px] lg:py-[14px] rounded-lg text-center"
+            className="cursor-pointer bg-gray-800 px-[10px] py-[5px] rounded-md text-center"
           >
-            <button className="cursor-pointer flex items-center gap-[10px]">
-              {/* {item.category === "YourPosts" ? (
-                    <IoImageOutline className="text-violet-500 text-2xl " />
-                  ) : (
-                    <FaRegHeart className="text-violet-500 text-2xl" />
-                  )} */}
+            <button className="cursor-pointer flex items-center gap-[5px]">
               {item.icons}
-              <span className="text-lg font-semibold">{item.name}</span>
+              <span className="text-md font-semibold">{item.name}</span>
             </button>
           </li>
         ))}
       </ul>
 
       {yourPosts ? (
-        <div className="flex-col justify-center items-center lg:grid lg:grid-cols-4 lg:gap-[30px]">
+        <div className="sm:grid sm:grid-cols-2 sm:gap-[15px] lg:grid-cols-3 lg:gap-[60px]">
           {posts.map((post) => (
             <ProfileYourPost key={post.id} post={post} />
           ))}
         </div>
       ) : postsLiked ? (
-        <div className="flex-col justify-center items-center lg:grid lg:grid-cols-4 lg:gap-[30px]">
+        <div className="sm:grid sm:grid-cols-2 sm:gap-[15px] lg:grid-cols-3 lg:gap-[60px]">
           {postUserLiked.map((post) => (
             <ProfileYourPost key={post.id} post={post} />
           ))}

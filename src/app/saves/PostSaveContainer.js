@@ -1,25 +1,27 @@
-import Image from "next/image";
-
+import { currentUser } from "@clerk/nextjs/server";
 import {
-  deleteConversation,
   getAllMessage,
   getAllUserInfoByEmail,
-  getAllUserWithoutMe,
   getConversation,
   getUserByid,
-} from "../_utils/postApi";
+} from "@/app/_utils/postApi";
 import Link from "next/link";
-import { currentUser } from "@clerk/nextjs/server";
+import Image from "next/image";
 
 async function PostSaveContainer({ post }) {
   const user = await currentUser();
-  const postUserInfo = await getUserByid(post?.userPostId);
-  const otherId = await getAllUserWithoutMe(postUserInfo?.id);
+
   const userSession = await getAllUserInfoByEmail(
-    user?.primaryEmailAddress?.emailAddress
+    user?.primaryEmailAddress?.emailAddress,
   );
 
-  const conversation = await getConversation(otherId.id, userSession.id);
+  const otherId = post?.userPostId;
+
+  if (!otherId || !userSession?.id) {
+    return null;
+  }
+
+  const conversation = await getConversation(otherId, userSession.id);
 
   if (conversation.length > 0) {
     let messages = await getAllMessage(conversation[0]?.id);
@@ -28,23 +30,26 @@ async function PostSaveContainer({ post }) {
     }
   }
 
+  const postUserInfo = await getUserByid(post?.userPostId);
+
   return (
     <>
       {post ? (
-        <div className="mb-[50px] relative lg:col-span-1 cursor-pointer">
-          <Link className="block" href={`/posts/${post.id}`}>
+        <div className=" sm:col-span-1  mb-[30px] relative cursor-pointer ">
+          <Link className=" block w-full h-full" href={`/posts/${post.id}`}>
             {post?.content ? (
               <Image
                 src={post?.content}
                 width={500}
                 height={500}
                 alt="post content"
-                className="w-full h-fit lg:w-[300px] lg:h-[300px] rounded-xl"
+                className="w-full max-h-[500px] m-auto sm:m-0 sm:w-[300px] sm:h-[300px] md:w-[250px] md:h-[250px] rounded-xl"
               />
             ) : (
               <div className=" rounded-lg ms-[10px] w-[500px] h-[400px] animate-pulse bg-slate-600"></div>
             )}
           </Link>
+
           <div className="absolute bottom-[20px] left-[15px] cursor-pointer flex items-center gap-[10px]">
             <Link href={`/profile/${post.userPostId}`}>
               {postUserInfo?.avatar ? (

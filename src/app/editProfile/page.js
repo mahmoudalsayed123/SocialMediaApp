@@ -2,11 +2,13 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { FaRegEdit } from "react-icons/fa";
 import { getAllUserInfoByEmail, updateUserIfo } from "../_utils/postApi";
 import { useUser } from "@clerk/nextjs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import MainHeading from "@/app/_components/MainHeading";
+import Back from "@/app/_components/Back";
+import { redirect, useRouter } from "next/navigation";
 
 function EditProfile() {
   const { user } = useUser();
@@ -16,20 +18,21 @@ function EditProfile() {
 
   const inputRef = useRef(null);
   const nameInput = useRef(null);
+  const router = useRouter();
 
   useEffect(
     function () {
       getAllUserInfoByEmail(user?.primaryEmailAddress.emailAddress).then(
         (res) => {
           setUserInfo(res);
-        }
+        },
       );
     },
-    [user?.primaryEmailAddress.emailAddress]
+    [user?.primaryEmailAddress.emailAddress],
   );
 
-  function handleClearFields() {
-    nameInput.current.value = "";
+  function handleCancelFields() {
+    router.push(`/profile/${userInfo?.id}`);
   }
 
   function handleSubmite(e) {
@@ -39,92 +42,101 @@ function EditProfile() {
       userName: name || userInfo?.userName,
     };
 
-    updateUserIfo(userInfo?.id, newUserInfo).then((res) => console.log(res));
-    handleClearFields();
-    redirect("/posts");
+    updateUserIfo(userInfo?.id, newUserInfo);
+
+    getAllUserInfoByEmail(user?.primaryEmailAddress.emailAddress).then((res) =>
+      setUserInfo(res),
+    );
+    router.push("/posts");
+    // redirect("/posts");
   }
 
   return (
-    <section className="x-[20px] lg:ms-[-250px] lg:col-span-2 lg:px-[100px] lg:py-[50px]">
-      <h1 className="flex items-center gap-[20px] text-4xl font-bold mb-[50px]">
-        <FaRegEdit />
-        <span>Edit Profile</span>
-      </h1>
+    <>
+      <Back />
+      <section className="px-[20px] pb-[30px] mt-[50px] ">
+        <MainHeading
+          name="Edit Profile"
+          url="/assets/icons/edit.svg"
+          width={30}
+          height={30}
+        />
 
-      <form>
-        <div className="flex gap-[20px] mb-[30px]">
-          {userInfo?.avatar ? (
-            <Image
-              src={userInfo?.avatar}
-              width={500}
-              height={500}
-              alt="avatar"
-              className="w-[100px] h-[100px] rounded-full"
+        <form>
+          <div className="flex items-center gap-[10px] mb-[30px]">
+            {userInfo?.avatar ? (
+              <Image
+                src={userInfo?.avatar}
+                width={500}
+                height={500}
+                alt="avatar"
+                className="w-[60px] h-[60px] rounded-full"
+              />
+            ) : (
+              <div className="w-[40px] h-[40px] lg:w-[50px] lg:h-[50px] rounded-full animate-pulse bg-slate-600"></div>
+            )}
+            <label className="cursor-pointer">
+              <Input
+                className="hidden"
+                defaultValue={userInfo?.avatar || ""}
+                type="file"
+                name="content"
+                ref={inputRef}
+              />
+              <p className="text-lg text-blue-500 font-bold">
+                Change Profile Image
+              </p>
+            </label>
+          </div>
+
+          <div className="mb-[30px]">
+            <p className="text-md font-semibold mb-[10px]">Name</p>
+            <input
+              onChange={(e) => setName(e.target.value)}
+              defaultValue={userInfo?.userName || ""}
+              name="name"
+              type="text"
+              ref={nameInput}
+              className="w-full p-[10px] outline-0 rounded-md bg-gray-800 border border-gray-800 transition-all duration-300 focus:border-gray-600 placeholder:text-md "
             />
-          ) : (
-            <div className="w-[40px] h-[40px] lg:w-[50px] lg:h-[50px] rounded-full animate-pulse bg-slate-600"></div>
-          )}
-          <label className="cursor-pointer ">
-            <Input
-              className="hidden"
-              defaultValue={userInfo?.avatar || ''}
-              type="file"
-              name="content"
-              ref={inputRef}
+          </div>
+
+          <div className="mb-[30px]">
+            <p className="text-md font-semibold mb-[10px]">User Name</p>
+            <input
+              disabled
+              defaultValue={userInfo?.userName || ""}
+              type="text"
+              className="w-full p-[10px] outline-0 rounded-md bg-gray-800 border border-gray-800 text-gray-600 transition-all duration-300 focus:border-gray-600 placeholder:text-md "
             />
-            <p className="text-xl text-blue-500 font-bold mt-[20px]">
-              Change Profile Image
-            </p>
-          </label>
-        </div>
+          </div>
 
-        <div className="mb-[30px]">
-          <h2 className="text-lg font-bold mb-[20px]">Name</h2>
-          <input
-            onChange={(e) => setName(e.target.value)}
-            defaultValue={userInfo?.userName || ''}
-            name="name"
-            type="text"
-            ref={nameInput}
-            className="border-1 border-slate-700 px-[25px] py-[15px] w-full outline-0 rounded-lg"
-          />
-        </div>
-
-        <div className="mb-[30px]">
-          <h2 className=" text-lg font-bold mb-[20px]">User Name</h2>
-          <input
-            disabled
-            defaultValue={userInfo?.userName || ''}
-            type="text"
-            className="border-1 border-slate-700 px-[25px] py-[15px] w-full outline-0 rounded-lg text-gray-500 text-lg"
-          />
-        </div>
-
-        <div className="mb-[30px]">
-          <h2 className="text-lg font-bold mb-[20px]">Email</h2>
-          <input
-            disabled
-            defaultValue={userInfo?.email  || ''}
-            type="text"
-            className="border-1 border-slate-700 px-[25px] py-[15px] w-full outline-0 rounded-lg text-gray-500 text-lg"
-          />
-        </div>
+          <div className="mb-[30px]">
+            <p className="text-md font-semibold mb-[10px]">Email</p>
+            <input
+              disabled
+              defaultValue={userInfo?.email || ""}
+              type="text"
+              className="w-full p-[10px] outline-0 rounded-md bg-gray-800 border border-gray-800 text-gray-600 transition-all duration-300 focus:border-gray-600 placeholder:text-md "
+            />
+          </div>
+        </form>
         <div className="w-[100%] flex justify-end items-center">
           <Button
-            onClick={handleClearFields}
-            className="w-fit px-[30px] py-[25px] rounded-lg bg-slate-600 text-lg me-[20px] hover:bg-slate-500 cursor-pointer"
+            onClick={handleCancelFields}
+            className=" px-[15px] py-[5px] rounded-lg bg-slate-600 text-md me-[15px] hover:bg-slate-500 cursor-pointer"
           >
-            Clear
+            Cancel
           </Button>
           <Button
             onClick={handleSubmite}
-            className="w-fit px-[30px] py-[25px] rounded-lg bg-violet-600 text-lg hover:bg-violet-500 cursor-pointer"
+            className="px-[15px] py-[5px] rounded-lg bg-violet-600 text-md hover:bg-violet-500 cursor-pointer"
           >
             Submit
           </Button>
         </div>
-      </form>
-    </section>
+      </section>
+    </>
   );
 }
 

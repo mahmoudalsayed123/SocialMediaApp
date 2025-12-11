@@ -2,8 +2,8 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
-import Sidebar from "../app/_components/Sidebar";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
+import Sidebar from "./_components/Sidebar";
 import Providers from "./providers";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -25,11 +25,6 @@ const queryClient = new QueryClient({
   },
 });
 
-// export const metadata = {
-//   title: "social-team",
-//   description: "A social media platform with multiple features",
-// };
-
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
@@ -39,10 +34,20 @@ export default function RootLayout({ children }) {
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
             <Providers>
-              <div className="grid grid-cols-1 lg:grid-cols-3">
-                <Sidebar />
-                <main className="lg:col-span-2 pb-20 lg:pb-0">{children}</main>
-              </div>
+              {/* ✔ صفحات المستخدم اللي داخل */}
+              <SignedIn>
+                <div className="grid md:grid-cols-[1.6fr_5fr]">
+                  <Sidebar />
+                  <main className="pb-0 lg:pb-0 overflow-hidden">
+                    {children}
+                  </main>
+                </div>
+              </SignedIn>
+
+              {/* ✔ صفحة sign-in فقط */}
+              <SignedOut>
+                <main>{children}</main>
+              </SignedOut>
             </Providers>
           </body>
         </html>
