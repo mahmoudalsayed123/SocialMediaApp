@@ -17,7 +17,7 @@ const ChatPage = async ({ params }) => {
   return (
     <>
       <Back />
-      <section className=" px-[20px] pb-[80px] min-h-[100vh] pt-[50px] relative">
+      <section className=" px-[40px] pb-[80px] min-h-[100vh] pt-[50px] relative">
         <div>
           {userInfo[0]?.avatar ? (
             <Image
